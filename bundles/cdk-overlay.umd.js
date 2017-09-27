@@ -58,14 +58,13 @@ var NoopScrollStrategy = (function () {
     return NoopScrollStrategy;
 }());
 /**
- * OverlayState is a bag of values for either the initial configuration or current state of an
-overlay.
+ * OverlayConfig captures the initial configuration used when opening an overlay.
  */
-var OverlayState = (function () {
+var OverlayConfig = (function () {
     /**
      * @param {?=} state
      */
-    function OverlayState(state) {
+    function OverlayConfig(state) {
         var _this = this;
         /**
          * Strategy to be used when handling scroll events while the overlay is open.
@@ -91,7 +90,7 @@ var OverlayState = (function () {
             Object.keys(state).forEach(function (key) { return _this[key] = state[key]; });
         }
     }
-    return OverlayState;
+    return OverlayConfig;
 }());
 /**
  * Reference to an overlay that has been created with the Overlay service.
@@ -1061,30 +1060,6 @@ It should be provided in the root component to ensure it is properly shared.
 var OverlayContainer = (function () {
     function OverlayContainer() {
     }
-    Object.defineProperty(OverlayContainer.prototype, "themeClass", {
-        /**
-         * Base theme to be applied to all overlay-based components.
-         * @return {?}
-         */
-        get: function () { return this._themeClass; },
-        /**
-         * @param {?} value
-         * @return {?}
-         */
-        set: function (value) {
-            if (this._containerElement) {
-                if (this._themeClass) {
-                    this._containerElement.classList.remove(this._themeClass);
-                }
-                if (value) {
-                    this._containerElement.classList.add(value);
-                }
-            }
-            this._themeClass = value;
-        },
-        enumerable: true,
-        configurable: true
-    });
     /**
      * @return {?}
      */
@@ -1094,7 +1069,7 @@ var OverlayContainer = (function () {
         }
     };
     /**
-     * This method returns the overlay container element.  It will lazily
+     * This method returns the overlay container element. It will lazily
     create the element the first time  it is called to facilitate using
     the container in non-browser environments.
     \@returns the container element
@@ -1114,9 +1089,6 @@ var OverlayContainer = (function () {
     OverlayContainer.prototype._createContainer = function () {
         var /** @type {?} */ container = document.createElement('div');
         container.classList.add('cdk-overlay-container');
-        if (this._themeClass) {
-            container.classList.add(this._themeClass);
-        }
         document.body.appendChild(container);
         this._containerElement = container;
     };
@@ -1360,7 +1332,7 @@ var nextUniqueId = 0;
 /**
  * The default state for newly created overlays.
  */
-var defaultState = new OverlayState();
+var defaultState = new OverlayConfig();
 /**
  * Service to create Overlays. Overlays are dynamically added pieces of floating UI, meant to be
 used as a low-level building building block for other components. Dialogs, tooltips, menus,
@@ -1824,7 +1796,7 @@ var ConnectedOverlayDirective = (function () {
      */
     ConnectedOverlayDirective.prototype._buildConfig = function () {
         var /** @type {?} */ positionStrategy = this._position = this._createPositionStrategy();
-        var /** @type {?} */ overlayConfig = new OverlayState({
+        var /** @type {?} */ overlayConfig = new OverlayConfig({
             positionStrategy: positionStrategy,
             scrollStrategy: this.scrollStrategy,
             hasBackdrop: this.hasBackdrop
@@ -2084,13 +2056,13 @@ exports.Overlay = Overlay;
 exports.OverlayContainer = OverlayContainer;
 exports.FullscreenOverlayContainer = FullscreenOverlayContainer;
 exports.OverlayRef = OverlayRef;
-exports.OverlayState = OverlayState;
 exports.ConnectedOverlayDirective = ConnectedOverlayDirective;
 exports.OverlayOrigin = OverlayOrigin;
 exports.ViewportRuler = _angular_cdk_scrolling.ViewportRuler;
 exports.GlobalPositionStrategy = GlobalPositionStrategy;
 exports.ConnectedPositionStrategy = ConnectedPositionStrategy;
 exports.VIEWPORT_RULER_PROVIDER = _angular_cdk_scrolling.VIEWPORT_RULER_PROVIDER;
+exports.OverlayConfig = OverlayConfig;
 exports.ConnectionPositionPair = ConnectionPositionPair;
 exports.ScrollingVisibility = ScrollingVisibility;
 exports.ConnectedOverlayPositionChange = ConnectedOverlayPositionChange;
